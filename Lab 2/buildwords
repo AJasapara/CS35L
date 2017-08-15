@@ -1,0 +1,8 @@
+#!/bin/sh
+grep -E '<td>.*<\/td>' | sed '/<td><\/td>/d' > temp.htm
+sed 's/<td>\(.*\)<\/td>/\1/g' temp.htm | sed -n 2~2p > temp2.htm
+sed 's/<u>\(.\)<\/u>/\1/g' temp2.htm | tr , '\n' > temp3.htm
+sed -e 's/^[ \t]*//' temp3.htm | tr ' ' '\n' | sed '/^$/d' > temp4.htm
+sed "s/\`/'/g" temp4.htm | tr A-Z a-z > temp5.htm
+sed "/[^pkmnwlhaeiou']/d" temp5.htm | sort -u
+rm temp*

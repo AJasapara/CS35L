@@ -1,0 +1,44 @@
+#!/bin/bash
+dir=$1
+declare -a ARRAY
+let count=0
+# Adds files with dots at front first
+RESULT=`ls -a $dir | grep "^\." | sort`
+for FILE in $RESULT
+do
+	if [ ! -L "$dir/$FILE" ]
+    then
+    	if [ -f "$dir/$FILE" ]
+		then
+			ARRAY[$count]="$dir/$FILE"
+	    	let count=count+1
+		fi
+    fi
+done
+
+# Adds files without dots second
+RESULT=`ls | sort`
+for FILE in $RESULT
+do
+	if [ ! -L "$dir/$FILE" ]
+    then
+    	if [ -f "$dir/$FILE" ]
+		then
+			ARRAY[$count]="$dir/$FILE"
+	    	let count=count+1
+		fi
+    fi
+done
+
+for (( i=0; i<$count-1; i++ ))
+do
+	for (( j=$i+1; j<$count; j++ ))
+	do
+		cmp -s "${ARRAY[$i]}" "${ARRAY[$j]}"
+		if [ $? == 0 ]
+		then
+			rm "${ARRAY[$j]}"
+			ln "${ARRAY[$i]}" "${ARRAY[$j]}"
+		fi
+	done
+done

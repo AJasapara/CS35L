@@ -1,0 +1,105 @@
+Name: Arpit Jasapara, UID: 504742401
+
+Laboratory: Spell-Checking Hawaiian
+
+Pre-Scripting Assignments:
+1. export LC_ALL='C'
+This command allowed me to change the locale to 'C'.
+
+2. sort /usr/share/dict/words -o words
+This command sorted the English words list and placed the file into the
+current working directory as 'words'.
+
+3. wget http://web.cs.ucla.edu/classes/spring17/cs35L/assign/assign2.html
+This command extracted the content of the assignment page into an HTML
+file called 'assign2.html'.
+
+4. tr -c 'A-Za-z' '[\n*]' < assign2.html
+This command replaces any character that is not in the alphabet with a
+single newline.
+
+5. tr -cs 'A-Za-z' '[\n*]' < assign2.html
+This command replaces sequences of characters not in the alphabet with a
+single newline. The previous command would replace each non-alphabetic
+character with a newline, whereas this one would have only 1 newline per
+consecutive non-alphabetic characters.
+
+6. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort
+This command takes the output of the previous command and sorts it into
+alphabetic order.
+
+7. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u
+This command is similar to the output of the previous command, but it also
+removes any repeat lines. Thus, all the lines printed are unique.
+
+8. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm - words
+This command compares what was outputted by the previous command with the 
+English sorted list in 'words'. The first column is full of the lines only
+in the HTML file, the second column is full of the lines only in 'words', 
+and the last column is full of the lines in both files. All of these columns
+share a common alphabetic order.
+
+9. tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm -23 - words
+This command only prints out the first column from the previous command,
+which is the column full of the lines only in the HTML file, and not in 
+'words'.
+
+
+Shell Scripting Assignments:
+10. wget http://mauimapp.com/moolelo/hwnwdseng.htm
+This command extracted the contents of the English to Hawaiian dictionary page
+into a file called 'hwnwdseng.htm'.
+
+11. buildwords
+#!/bin/sh
+grep -E '<td>.*<\/td>' | sed '/<td><\/td>/d' > temp.htm
+sed 's/<td>\(.*\)<\/td>/\1/g' temp.htm | sed -n 2~2p > temp2.htm
+sed 's/<u>\(.\)<\/u>/\1/g' temp2.htm | tr , '\n' > temp3.htm
+sed -e 's/^[ \t]*//' temp3.htm | tr ' ' '\n' | sed '/^$/d' > temp4.htm
+sed "s/\`/'/g" temp4.htm | tr A-Z a-z > temp5.htm
+sed "/[^pkmnwlhaeiou']/d" temp5.htm | sort -u
+rm temp*
+
+The first line declares the file to be a script file, using the sh shell.
+The second line removes everything except <td>someWord</td>.
+The third line removes the tags <td> and </td> and only keeps every
+other line (only the Hawaiian lines).
+The fourth line changes <u>a</a> to a, and commas into newlines.
+The fifth line removes blank space and adds newlines between multiple 
+words on the same line.
+The sixth line converts the grave accent into an apostrophe, and upper-case
+characters into lower-case characters.
+The seventh line removes any lines that contain non-Hawaiian characters, and 
+sorts the entire list.
+The eighth line removes the temp files to clean up the mess.
+
+12. Hawaiian Spell-Checker
+tr '[:upper:]' '[:lower:]' < assign2.html | tr -cs "pkmnwlhae'iou" "[\n*]" | 
+sort -u | comm -23 - hwords
+This command converts the input file into lowercase, replaces non-Hawaiian
+words with newlines, sorts them alphabetically, and then compares it to the
+Hawaiian words dictionary. It only gives the first column where it lists the
+words not in the dictionary (therefore, the misspelled words).
+
+13. English Spell-Checker
+tr '[:upper:]' '[:lower:]' < assign2.html | tr -cs 'A-Za-z' '[\n*]' | 
+sort -u | comm -23 - words
+This command converts the input file into lowercase, replaces non-English
+words with newlines, sorts them alphabetically, and then compares it to the
+English words dictionary. It only gives the first column where it lists the
+words not in the dictionary (therefore, the misspelled words).
+
+14. Testing Spell-Checkers
+Number of Misspelled Hawaiian Words in 'hwords': 0
+
+Number of Misspelled Hawaiian Words in 'assign2.html': 198
+Number of Misspelled English Words in 'assign2.html': 39
+I used wc -l to count the number of misspelled words.
+
+Examples of Words Misspelled as Hawaiian, but not as English:
+who, man, name, a, like, line, link, hawaiian, how
+Examples of Words Misspelled as English, but not as Hawaiian:
+e, halau, i, iau, po, wiki
+I redirected the outputs of misspelled words into the other
+spell-checker, and used comm -12, instead of comm -23, to 
+obtain the correctly spelled words in the other language.
