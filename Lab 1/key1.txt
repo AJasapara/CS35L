@@ -1,0 +1,82 @@
+Exercise 1.1:
+2. C-s P U B L I C RET
+3. C-s L a b o r a t o r y C-s RET
+4. C-s s e l f - r e f e r e n t i a l C-s RET
+5. C-s a r r o w C-s RET
+6. C-e
+7. C-a
+8. Yes, I did without using the arrow keys with the above commands.
+9. No I did not.
+
+Exercise 1.2
+2. C-s < ! - - C-s RET C-a C-k
+3. C-s < ! - - RET C-a C-k
+4. C-s < ! - - RET C-a C-k C-k C-k
+5. C-s < ! - - RET C-k C-s < ! - - RET C-a C-k C-s
+
+Exercise 1.3
+2. C-s A s s i g n m e n t RET DEL 3 7 C-s A s s i g n m e n t RET DEL 3 7
+3. C-s U T C-b DEL DEL DEL DEL S - A S C I I
+4. M-<  C-s < / o l > C-a RET
+
+Exercise 1.4
+3. M-> C-r - < C-f C-SP C-e M-w M-g M-g 3 5 3 RET C-y
+M-> C-r - < C-r C-f C-SP C-e M-w M-g M-g 3 3 8 RET C-SP C-e DEL C-y
+M-> C-r - < C-r C-r C-f C-SP C-e M-w M-g M-g 3 0 3 RET C-y RET
+M-> C-r - < C-r C-r C-n C-f C-SP C-e M-w M-g M-g 3 0 4 RET C-y RET
+M-> C-r - < C-r C-r C-n C-n C-f C-SP C-e M-w M-g M-g 3 0 5 RET C-y RET
+M-> C-r - < C-r C-r C-r C-f C-SP C-e M-w M-g M-g 1 8 C-y 
+4. Same as above
+5. M-> C-SP C-r - - - C-r RET C-w
+6. C-x u
+7. < ! - - M-> - - ! >
+8. M-< C-s < o l > C-s C-s C-s C-s C-s C-s C-s M-% < o l > RET < O l > RET !
+I found 7 instances.
+
+Exercise 1.5
+1. C-x d + j u n k RET
+2. RET C-x C-f h e l l o . c RET
+3. M-x c o m p i l e RET g c c SP  h e l l o . c
+4. M-! . / a . o u t
+5. C-SP M-> M-w C-x o C-y
+#include &lt;stdio.h&gt;
+int
+main (void)
+{
+  char n = '\n';
+  char b = '\\';
+  char q = '"';
+  char const *p = "#include &lt;stdio.h&gt;%cint%cmain (void)%c{%c  char n = '%cn';%c  char b = '%c%c';%c  char q = '%c';%c  char const *p = %c%s%c;%c  printf (p, n, n, n, n, b, n, b, b, n, q, n, q, p, q, n, n, n, n);%c  return 0;%c}%c";
+  printf (p, n, n, n, n, b, n, b, b, n, q, n, q, p, q, n, n, n, n);
+  return 0;
+}
+
+Exercise 1.6
+1. C-x b * s c r a t c h * RET
+2. ( r a n d o m ) C-j
+3. ( s e t q SP x SP ( r a n d o m ) ) C-j
+( s e t q SP y SP ( r a n d o m ) ) C-j
+4. ( * SP x SP y ) C-j
+The answer is 125125379974462279 and it is not correct.
+The negative sign disappeared and it is not even close to the actual product.
+5. M-: ( * SP x SP y ) RET
+The result is the same, but there are two extra numbers at the end.
+They show up in the form (#o6744215730160675507, #x1bc88dec1c37b47).
+6. No, because they are generated based on a specific Emacs seed at startup.
+If we were to use the same seed at startup,
+we would obtain the same "random" integers. 
+7. It is roughly 1-(4x10^(-18)), or approximately 1. 
+I got this probability by realizing that the only time the product would be
+mathematically correct would be when the product is less than or equal to 18
+digits. In order for that to occur, the inputs themselves must be on average,
+less than or equal to 9 digits. Thus, I did 10^9/10^18 to get 10^(-9).
+I then multiplied this number by 2 to account for the combinations where
+one number is 11 digits and the other one is 7, etc. to get 2x10^(-9).
+I then squared this number since there are 2 factors being multiplied, 
+and both must be on average, less than 9 digits, to get 4x10^(-18). However,
+since I was asked for the probability of the product being incorrect,
+I subtracted this value from 1. This answer makes sense since the probability
+of getting such small random numbers is close to none, and even smaller when
+considering the fact that both of the numbers must be small. Thus, for the most
+part, the probability that the two-variable product is mathematically incorrect
+is 1.

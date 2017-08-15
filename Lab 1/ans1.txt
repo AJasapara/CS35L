@@ -1,0 +1,86 @@
+1. man -k, then enter the specific word you're searching for.
+I used man man to find this in the manual for man.
+
+2. cp is in /usr/bin/cp and wc is in /usr/bin/wc
+I used whereis cp and whereis wc respectively to find their locations.
+
+3. I found 3 executables that are 1 character long:
+w (in /usr/bin/w and it shows who is logged on/what they are doing)
+X (in /usr/bin/X and it is a window system)
+[ (in /usr/bin/[ and it is bash built-in commands)
+
+I found these by typing in whatis ? in the /usr/bin directory.
+
+4. /etc/alternatives/emacs
+I used cd /usr/bin to find emacs,
+which is shown as redirecting to /etc/alternatives/emacs
+
+5. g+s passes on the Group ID to all new files and subdirectories,
+and o-x removes the execute permission from the others class.
+I used man chmod to find out what these attributes do.
+
+6. -mtime 21
+I used man find | grep modif to find lines pertaining to modifying for find.
+
+7. find -mtime 21 -type d will list all the directories.
+Since there are too many to list,
+I assumed we were not supposed to list them here.
+I used man find | grep dir to find the lines pertaining to directories.
+
+8. 247
+I used man wc to see how to count lines,
+then used find -type l | wc -l to get the count of symbolic links.
+
+9.libfreeblpriv3.so from June 28, 2016, making it the oldest regular file.
+I used C-x d to open up dired, navigated to /usr/lib,
+and pressed s to sort by time.
+I then used M-> to move to the end of the buffer,
+and scrolled up till I found the first regular file.
+
+On the other hand, if you were asking for the oldest regular file in /usr/lib
+AND its SUBDIRECTORIES, then it would be crt1.o in
+/usr/lib/x86_64-redhat-linux6E/lib64. The file is from January 24, 2014,
+and there are a number of files in this directory that are from the same date.
+I found this file by going through all the directories (mostly empty) from the
+bottom until encountering the oldest regular file.
+
+10. /usr/share/i18n/locales
+I used man locale to read up on where locale gets its data from.
+
+11. There are 9 commands:
+Buffer-menu-sort
+sort-columns
+sort-fields
+sort-lines
+sort-numeric-fields
+sort-pages
+sort-paragraphs
+sort-regexp-fields
+tabulated-list-col-sort
+
+I used C-h a "sort" to find all the commands with sort in their name.
+
+12. Yes I can list them concisely:
+A defun is a top-level major definition.
+C-M-a moves to beginning of the current or preceding defun.
+C-M-b moves backwards one balanced expression.
+C-M-c exits the recursive edit.
+C-M-d moves down one level of parentheses.
+C-M-e moves to the end of the current or following defun.
+C-M-f moves forward one balanced expression.
+C-M-h puts a mark at the end of a function definition,
+and puts the point at the beginning.
+
+I used C-h K and then typed in the respective keys (C-M-a, C-M-b, etc.)
+
+13. Quits the current running or partially typed command.
+It is equivalent to the command keyboard-quit.
+I used C-h K C-g to find the description.
+
+14. It pastes the last killed text into the buffer, at the point.
+I used C-h a "yank" to find the yank function.
+
+15. Emacs lists the . and .. directories, whereas ls -l doesn't.
+Emacs also has a more descriptive first line about space saying
+"total used in directory 297196 available 13493736",
+whereas ls -l just says "total 297120"
