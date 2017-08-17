@@ -1,0 +1,57 @@
+Name: Arpit Jasapara, UID: 504742401
+
+Homework: Installing a small change to a big package
+
+1. He removed that line, in order to replace it with the line
+"case long_iso_time_style:" which got rid of the underscore after 
+case. The underscore was causing issues where the case would not be 
+properly identified. However, in the end, it was not necessary to 
+remove that line because it was never called in the patched code. 
+It used to be called by a goto line, but that line was removed.
+
+2. We should watch out for compatibility issues with any other 
+programs or updates. Since this is just a workaround, future official 
+versions of Coreutils could also cause issues if they required some 
+of the old code, or build on it. In other countries, this version of 
+Coreutils could definitely cause issues, especially if they do not speak 
+English. They may have different names for the months or use a different 
+calendar entirely, thus not understanding the date. Moreover, much of the 
+world is used to DD/MM/YYYY so seeing the month before the day could 
+throw people off.
+
+Homework: Rewriting a script
+
+3. Upon running the randline.py script on /dev/null, I obtained the
+following message:
+
+$ python randline.py /dev/null
+Traceback (most recent call last):
+  File "randline.py", line 70, in <module>
+    main()
+  File "randline.py", line 64, in main
+    sys.stdout.write(generator.chooseline())
+  File "randline.py", line 34, in chooseline
+    return random.choice(self.lines)
+  File "/usr/local/cs/Python-2.7.12/lib/python2.7/random.py", line 275, 
+  in choice
+    return seq[int(self.random() * len(seq))]  
+    # raises IndexError if seq is empty
+IndexError: list index out of range
+
+I get this error because on line 34 inside the chooseline function, it 
+returns random.choice(self.lines). Since self.lines is empty, any index 
+chosen would be out of range. Thus, we get the IndexError: list index 
+out of range.
+
+4. Upon running randline.py with python3, I obtained the following message: 
+
+$ python3 randline.py test1
+  File "randline.py", line 65
+    except IOError as (errno, strerror):
+                      ^
+SyntaxError: invalid syntax
+
+I get this error because on line 65 of the script, it contains the line 
+"except IOError as (errno, strerror):". However, this syntax has been 
+removed in Python 3, and is no longer considered valid code. Thus, the 
+script fails to run and ends with the invalid syntax error.

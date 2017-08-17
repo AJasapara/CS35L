@@ -1,0 +1,109 @@
+Name: Arpit Jasapara, UID: 504742401
+
+Laboratory: Installing a small change to a big package
+
+1. wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-7.6.tar.gz
+This command allowed me to get the coreutils package.
+
+2. tar -xzvf coreutils-7.6.tar.gz
+This command extracted the package into a coreutils-7.6 folder.
+
+3. ./configure --prefix='/u/cs/ugrad/arpit/Desktop/Lab_3/coreutils-7.6'
+This command configured the makefile into the coreutils-7.6 folder.
+
+4. make
+This command compiled all the program codes and created executables.
+
+5. make install
+This command copied the executables into the system directories,
+such as bin.
+
+6. emacs patch_file
+This command allowed me to create a patch file, where I pasted the
+code that I copied from Padraig Brady's patch website.
+
+7. patch -p1 < patch_file
+This command patched the files mentioned in the patch_file (namely 
+ls) using the p1 flag, which indicated that the command should ignore 
+the first directory in the path for the files needing to be patched.
+
+8. make
+This command re-compiled the program codes that were changed, and
+created executables.
+
+make[3]: Entering directory '~/Desktop/Lab_3/coreutils-7.6/src'
+  CC     ls.o
+  CCLD   dir
+  CCLD   vdir
+  CCLD   ls
+make[3]: Leaving directory '~/Desktop/Lab_3/coreutils-7.6/src'
+make[2]: Entering directory '~/Desktop/Lab_3/coreutils-7.6/man'
+  GEN    dir.1
+  GEN    vdir.1
+  GEN    ls.1
+make[2]: Leaving directory '~/Desktop/Lab_3/coreutils-7.6/man'
+
+The above commmands indicate which files needed to be recompiled.
+In particular, we see that the ls file was recompiled, as we expected, 
+since our patch mainly applies to this command. 
+
+9. src/ls -l
+This command successfully tested the patched ls command, which now
+displays the time in the correct UNIX format.
+
+total 4684
+-rw-r--r--  1 arpit csugrad   80541 Sep 18  2008 ABOUT-NLS
+-rw-r--r--  1 arpit csugrad   47272 Sep 10  2009 aclocal.m4
+-rw-r--r--  1 arpit csugrad    3571 Sep  1  2009 AUTHORS
+drwxr-xr-x  2 arpit csugrad    8192 Apr 18 13:23 bin
+... (Many more lines here)
+drwxr-xr-x  5 arpit csugrad    4096 Apr 18 13:23 share
+drwxr-xr-x  3 arpit csugrad   28672 Apr 18 13:43 src
+drwxr-xr-x 22 arpit csugrad    4096 Apr 18 13:20 tests
+-rw-r--r--  1 arpit csugrad   34903 Sep 10  2009 THANKS
+-rw-r--r--  1 arpit csugrad    1678 Sep 10  2009 THANKS-to-translators
+-rw-r--r--  1 arpit csugrad     121 Sep  1  2009 THANKStt.in
+-rw-r--r--  1 arpit csugrad    7658 Sep  1  2009 TODO
+
+10. bin/ls -l
+This command runs the pre-patch ls command, which showed the non-Unix
+date format. I ran this command to compare its output to the previous
+command.
+
+total 4684
+-rw-r--r--  1 arpit csugrad   80541 2008-09-18 00:19 ABOUT-NLS
+-rw-r--r--  1 arpit csugrad   47272 2009-09-10 22:56 aclocal.m4
+-rw-r--r--  1 arpit csugrad    3571 2009-09-01 04:01 AUTHORS
+drwxr-xr-x  2 arpit csugrad    8192 2017-04-18 13:23 bin
+... (Many more lines here)
+drwxr-xr-x  5 arpit csugrad    4096 2017-04-18 13:23 share
+drwxr-xr-x  3 arpit csugrad   28672 2017-04-18 13:43 src
+drwxr-xr-x 22 arpit csugrad    4096 2017-04-18 13:20 tests
+-rw-r--r--  1 arpit csugrad   34903 2009-09-10 10:33 THANKS
+-rw-r--r--  1 arpit csugrad    1678 2009-09-10 23:06 THANKS-to-translators
+-rw-r--r--  1 arpit csugrad     121 2009-09-01 04:01 THANKStt.in
+-rw-r--r--  1 arpit csugrad    7658 2009-09-01 04:01 TODO
+
+11. emacs newFile
+This command created a new file (as recent as can be). I tested both of the 
+above ls commands on this file, and they both worked as expected.
+
+Old Output:
+-rw-r--r--  1 arpit csugrad       2 2017-04-18 20:27 newFile
+
+New Output:
+-rw-r--r--  1 arpit csugrad       2 Apr 18 20:27 newFile
+
+12. touch -t 201601010000 newFile
+This command changed newFile into a file that is a year old, in accordance 
+with the spec. I tested both of the above ls commands on this file, 
+and they both worked as expected. One noticeable difference between a recent 
+file and a file older than one year, is that in standard UNIX format, the 
+recent file will display the time, whereas the old file displays the year
+instead. THe pre-patch format stays the same regardless of old/new files.
+
+Old Output:
+-rw-r--r--  1 arpit csugrad       2 2016-01-01 00:00 newFile
+
+New Output:
+-rw-r--r--  1 arpit csugrad       2 Jan  1  2016 newFile
