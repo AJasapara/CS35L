@@ -1,0 +1,109 @@
+Name: Arpit Jasapara, UID: 504742401
+
+Laboratory: Debugging a C program
+
+1. wget http://web.cs.ucla.edu/classes/spring17/cs35L/assign/coreutils-with-bug.tar.gz
+I got the tar file.
+
+2. tar -xzvf coreutils-with-bug.tar.gz
+I then unzipped it.
+
+3. ./configure
+I configured it so I could run the ls command.
+
+4. make
+This call failed due to conflicting types for 'futimens'. There was a previous declaration
+for futimens. 
+
+5. wget http://web.cs.ucla.edu/classes/spring17/cs35L/assign/coreutils.diff
+I got the patch.
+
+6. patch -p0 < coreutils.diff
+The renaming patch changed the function 'futimens' into 'coreutils_futimens', thus
+preventing the conflict in file name.
+
+7. tmp=$(mktemp -d)
+cd $tmp
+touch -d '1918-11-11 11:00 GMT' wwi-armistice
+touch now
+sleep 1
+touch now1
+
+I followed the directions online to go into a tmp directory to run the buggy ls.
+
+8. TZ=UTC0 ~/Desktop/Lab_4/coreutils-with-bug/src/ls -lt --full-time
+
+total 0
+-rw-r--r-- 1 arpit csugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 arpit csugrad 0 2017-04-29 06:37:37.438820626 +0000 now1
+-rw-r--r-- 1 arpit csugrad 0 2017-04-29 06:37:31.208653539 +0000 now
+
+I reproduced the problem as shown above where wwi-armistice shows up above the 
+two recent files.
+
+9. gdb src/ls
+I opened the buggy ls using gdb.
+
+10. (gdb) run -lt /tmp/tmp.MnfNUEv1Vt
+I ran the ls in the directory with the files.
+
+11. (gdb) info locals
+I obtained information on the locals. I noticed one function that might be 
+the location where the issues are occurring. It was the compare time function,
+compare m_time.
+
+12. (gdb) break compare m_time
+I set a breakpoint at compare m_time and ran the program till it hit that point.
+
+13. (gdb) step
+I stepped through a few times until I saw a function where the issue seems to be
+happening.
+
+14. (gdb) break timespec_cmp
+I ran the program till it hit this function. Inside this function there are 2 buggy 
+lines that do not account for overflow:
+
+int diff = a.tv_sec - b.tv_sec;
+return diff ? diff : a.tv_nsec - b.tv_nsec;
+
+15. emacs timespec.h
+I opened up the problematic file, and added comparison operators to check for overflow.
+
+16. diff -u coreutils-with-bug/lib/timespec.h timespec.h > lab4.diff
+I created a diff file with my changes.
+
+17. C-x 4 a, C-sp, C-w, C-y
+I added the ChangeLog entry using emacs, which I then selected, cut, and paste onto 
+the top of the diff file.
+
+18. touch -d '1918-11-11 11:00 GMT' wwi-armistice
+touch now
+sleep 1
+touch now1
+
+I tested these files on the SEASnet server.
+
+19. TZ=UTC0 ls -lt --full-time
+
+total 7292
+-rw-r--r--  1 arpit csugrad       0 2054-12-17 09:28:16.000000000 -0800  wwi-armistice
+-rw-r--r--  1 arpit csugrad       0 2017-04-30 23:35:30.071537000 -0700  now1
+-rw-r--r--  1 arpit csugrad       0 2017-04-30 23:35:23.981981000 -0700  now
+-rw-r--r--  1 arpit csugrad     606 2017-04-30 23:32:54.996363000 -0700  lab4.diff
+-rw-r--r--  1 arpit csugrad       3 2017-04-30 23:32:07.880055000 -0700 '#ChangeLog#'
+-rw-r--r--  1 arpit csugrad     605 2017-04-30 23:32:02.468560000 -0700  lab4.diff~
+-rw-r--r--  1 arpit csugrad     454 2017-04-30 23:27:58.534215000 -0700  timespec.h.rej
+-rw-r--r--  1 arpit csugrad    1825 2017-04-30 23:27:58.531214000 -0700  timespec.h.orig
+-rw-r--r--  1 arpit csugrad    1825 2017-04-30 23:24:32.188226000 -0700  timespec.h
+-rw-r--r--  1 arpit csugrad    1805 2017-04-30 23:22:33.726326000 -0700  timespec.h~
+-rwxr-xr-x  1 arpit csugrad   13128 2017-04-30 23:07:02.603666000 -0700  a.out
+-rwxr--r--  1 arpit csugrad    2380 2017-04-30 23:06:50.522593100 -0700  sfrob.c
+-rwxr--r--  1 arpit csugrad      76 2017-04-30 22:53:11.364130400 -0700  printer
+-rwx------  1 arpit csugrad    3715 2017-04-30 22:12:45.211559300 -0700  sfrobtemp.c
+drwxr-xr-x 11 arpit csugrad    4096 2017-04-27 13:28:39.250312000 -0700  coreutils-with-bug
+-rw-r--r--  1 arpit csugrad      37 2017-04-27 12:58:52.442285000 -0700  lab4.txt
+-rw-r--r--  1 arpit csugrad 7369926 2010-01-26 12:37:27.000000000 -0800  coreutils-with-bug.tar.gz
+
+I used the already installed touch and ls utilities. As seen above, the ls utility fails to display 
+the wwi-armistice file correctly due to overflow. The SEASnet server seems to be using a 32-bit 
+system instead of a 64-bit system, so the sign bit is truncated and this strange output appears.
