@@ -1,0 +1,70 @@
+Name: Arpit Jasapara, UID: 504742401
+
+1. Sfrob vs. Sfrobu, Input Lines to Time Function
+
+1000-Lines:
+sfrob r: 0.006 u: 0.003 s: 0.000
+sfrobu r: 0.050 u: 0.004 s: 0.044
+Comparisons: 8423
+
+10000 Lines:
+sfrob r: 0.031 u: 0.019 s: 0.004
+sfrobu r: 0.462 u: 0.017 s: 0.436
+Comparisons: 180587
+
+100000 Lines:
+sfrob r: 0.311 u: 0.212 s: 0.009
+sfrobu r: 4.735 u: 0.249 s: 4.427
+Comparisons: 2051123
+
+1000000 lines:
+sfrob r: 3.209 u: 2.335 s: 0.071
+sfrobu r: 47.072 u: 2.396 s: 43.803
+Comparisons: 19629574
+
+Sfrob clearly had superior performance times when compared to 
+sfrobu. This makes sense, as the case is similar to tr2b and tr2u. 
+The unbuffered I/O takes much longer since it has to emulate a 1-byte 
+buffer each time it reads or writes, whereas the buffered I/O uses 
+the actual system buffer to quickly accomplish its task.
+
+Function of Number of Input Lines to Approximate Performance Time: 
+f(lines) = comparisons = (approximately) 19.547 * (lines) - 8451
+R^2 = 0.97362
+
+It seems to be a linear relationship between the number of input lines 
+and the overall real time. The linear regression coefficient is quite 
+high indicating the validity of this relationship.
+
+2. Time sfrob, sfrobu, sfrobs, sfrobu -f, and sfrobs -f on Large Input:
+
+time ./sfrob < testMassive > tempOutput
+real    0m0.623s
+user    0m0.551s
+sys     0m0.016s
+
+time ./sfrobu < testMassive > tempOutput
+real    0m8.152s
+user    0m0.671s
+sys     0m7.412s
+
+time ./sfrobs < testMassive > tempOutput
+real    0m0.182s
+user    0m0.097s
+sys     0m0.043s
+
+time ./sfrobu -f < testMassive > tempOutput
+real    0m8.372s
+user    0m1.009s
+sys     0m7.308s
+
+time ./sfrobs -f < testMassive > tempOutput
+real    0m0.262s
+user    0m0.181s
+sys     0m0.039s
+
+As expected, sfrobs performed the best. Since sfrobs uses the POSIX commands, 
+they are the most efficient, as they were created by a team of software 
+engineers and refined throughout the ages. Then, coming in at a close second, 
+was sfrob, which was also expected since it uses buffered I/O. The slowest by 
+far was sfrobu, primarily due to the fact that it uses unbuffered I/O.
