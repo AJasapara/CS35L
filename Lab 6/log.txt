@@ -1,0 +1,57 @@
+Name: Arpit Jasapara, UID: 504742401
+
+1. sort --version
+Since I already have my PATH set to /usr/local/cs/bin, I can just directly 
+call sort. The version was 8.27, which was recent enough for this lab.
+
+2. od -An -tfF -N 40000000 < /dev/urandom | tr -s ' ' '\n' > rando.txt
+This command creates creates a 40-million byte file (each float is 4 bytes), 
+ignoring the offset and generating 10,000,000 random single precision floating 
+point numbers. The pipeline then uses tr to convert all white space into a 
+newline, thus creating the desired text file.
+
+3. time -p sort -g rando.txt > /dev/null 
+real 20.69
+user 112.05
+sys 0.46
+
+This command runs the sort without multi-threading. 
+
+4. time -p sort -g --parallel=1 rando.txt > /dev/null
+real 100.94
+user 100.74
+sys 0.20
+
+This command runs the sort with 1 thread.
+
+5. time -p sort -g --parallel=2 rando.txt > /dev/null
+real 55.72
+user 105.68
+sys 0.27
+
+This command runs the sort with 2 threads.
+
+6. time -p sort -g --parallel=4 rando.txt > /dev/null
+real 31.75
+user 106.77
+sys 0.35
+
+This command runs the sort with 4 threads.
+
+7. time -p sort -g --parallel=8 rando.txt > /dev/null
+real 20.49
+user 111.80
+sys 0.44
+
+This command runs the sort with 8 threads.
+
+As expected, increasing the number of threads decreased the real time by 
+a little less than half. However, the system call time went up. This makes 
+sense because the threads are now doing more syscalls at the same time, 
+demanding more from the system. The user time didn't change much, which 
+also makes sense since the user time is the time summed up across the 
+threads. The 8-threaded command had similar performance to the default sort 
+in all the categories of the time. This would lead one to believe that the 
+initial sort was run on 8 cores, or is capped at 8 cores. Thus, the two 
+have similar perfomance, demonstrating the significant improvement in 
+performance that results from multi-threading.
