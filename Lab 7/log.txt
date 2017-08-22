@@ -1,0 +1,65 @@
+Name: Arpit Jasapara, UID: 504742401
+
+For this lab my partner acting as the client/server was Sanketh Hegde.
+To start this lab we boot up Ubuntu from a disk image loaded onto a USB, 
+because we are not allowed to use sudo on SEASNet servers.
+
+1. dpkg --get-selections | grep openssh
+This command checks for OpenSSH.
+
+2. sudo apt-get install openssh-server
+We did not have the OpenSSH-server program so we use this command to 
+install it.
+
+3. ssh-keygen
+This command essentially generates and authenticates RSA keys for SSH 
+connection if someone tries to SSH into my server. I saved the keys in
+∼/.ssh/id_rsa and I set no password for this key.
+
+4. sudo useradd -d /home/sanketh/ -m sanketh
+This creates a directory named sanketh within the home directory and adds a
+user with username sanketh.
+
+5. sudo passwd sank
+This creates the password for the user sanketh, I chose to set the it as sank 
+for convenience.
+
+6. cd /home/sanketh
+This command enters Sanketh's directory.
+
+7. sudo mkdir .ssh
+This command creates an ssh directory to store all the info from the RSA keys.
+
+8. sudo chown -R sanketh .ssh
+This command makes Sanketh the owner of his directory.
+
+9. sudo chmod 700 .ssh
+This command gives Sanketh the permissions he needs so he can modify this directory.
+
+10. ifconfig
+I used this command to obtain my IP address: 164.67.61.118
+Sanketh's IP: 169.232.122.177
+
+11. ssh-copy-id -i arpit@169.232.122.177
+After my partner had done the above 10 steps, I used this command to copy my public 
+key over to his server.
+
+12. ssh-add
+This command adds the private key to his ssh-agent so he can decrypt my key, and I 
+would not need to type my password in.
+
+13. ssh arpit@169.232.122.177
+This command allowed me to enter the server with Sanketh's IP address.
+
+14. mkdir test
+This command allowed me to create a test directory to see if we could both see it.
+
+15. emacs test.txt
+This command allowed me to create a test file that I put "Waddup Sanketh" in to see 
+if we could both see it. Both tests were successful.
+
+16. ssh -X arpit@169.232.122.177
+This command allowed me to SSH in with the capability to open other programs such as Firefox.
+
+17. firefox
+This command allowed me to test to see if firefox would open, and it successfully did.

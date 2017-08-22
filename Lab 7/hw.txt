@@ -1,0 +1,30 @@
+Name: Arpit Jasapara, UID: 504742401
+
+1. Yes, our network is still secure. The idea behind assymetric encryption 
+is that first all the data would be encrypted using the receiver's public 
+key, and then when the data is received by the intended party, it will be 
+decrypted using the private key. Since the other malicious party does not have 
+the private key, it will simply come off as meaningless junk to them.
+
+However, if the other teams had tapped our keyboards, then no, the network would 
+not be secure. Since they have access to our keystrokes, they can see what 
+keystrokes are associated with the passphrase for the private key. Moreover, they 
+can reverse engineer the decryption key by comparing the keystrokes to the 
+encrypted data. Thus, they would have the means to decrypt and have access to the 
+data.
+
+Similarly, if the other teams had control of the USB, they would have access to 
+the .ssh folders where we have kept the RSA keys. Thus, they would obtain all of 
+the public and private keys, and can decrypt all of our data. So, no the network 
+would not be secure.
+
+2. gpg --verify would not necessarily be correct because it just compares the decrypted 
+signature to the decrypted data. If this tar file were intercepted, and somehow my key 
+was used to decrypt it, that person could simply change the data and then encrypt it 
+with their own signature. This command will then verify that the signature matches the 
+decrypted data, but then there is no way of knowing who the original owner was. This 
+command will simply verify the integrity of the file, not the origin.
+
+A common solution to this problem is to use a trusted third party organization. This 
+organization can issue a certificate at time of sending, and if this certificate 
+has been changed upon receiving the file, we will know that tampering has occurred. 
