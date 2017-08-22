@@ -1,0 +1,295 @@
+Name: Arpit Jasapara, UID: 504742401
+
+1. git clone https://git.savannah.gnu.org/git/diffutils.git
+I ran this command to clone the Git repository in my current directory.
+
+2. git log > git-log.txt
+I put the log in "git-log.txt" as specified by the spec.
+
+3. git tag > git-tags.txt
+I put the tag in "git-tags.txt" as specified by the spec.
+
+4. git format-patch 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f --stdout -1 > quote-patch.txt
+I opened up git-log in Emacs, and searched for maint: quote 'like this' to obtain the commit ID: 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f. 
+I then formatted the patch using the ID specifying to stdout so it could be redirected to "quote-patch.txt".
+
+5. git checkout -b 'arpit3.0' 'v3.0'
+I checked out and checked into a new branch called 'arpit3.0'.
+
+6. patch -p1 < quote-patch.txt
+I patched the necessary files. Upon prompting me for which files to patch after the main patch had been applied, I simply hit return to skip these
+unnecessary patches.
+
+7. git status
+On branch arpit3.0
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   NEWS
+        modified:   README
+        modified:   TODO
+        modified:   doc/diagmeet.note
+        modified:   ms/config.bat
+        modified:   ms/config.site
+        modified:   po/en.po
+        modified:   src/analyze.c
+        modified:   src/cmp.c
+        modified:   src/context.c
+        modified:   src/diff.c
+        modified:   src/diff.h
+        modified:   src/diff3.c
+        modified:   src/dir.c
+        modified:   src/ifdef.c
+        modified:   src/io.c
+        modified:   src/sdiff.c
+        modified:   src/side.c
+        modified:   src/system.h
+        modified:   src/util.c
+        modified:   tests/help-version
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        NEWS.orig
+        README-hacking.orig
+        README-hacking.rej
+        README.orig
+        README.rej
+        cfg.mk.orig
+        cfg.mk.rej
+        git-log.txt
+        git-tags.txt
+        ms/config.site.orig
+        quote-patch.txt
+        src/cmp.c.orig
+        src/context.c.orig
+        src/diff.c.orig
+        src/diff.c.rej
+        src/diff.h.orig
+        src/diff3.c.orig
+        src/diff3.c.rej
+        src/dir.c.orig
+        src/sdiff.c.orig
+        src/system.h.orig
+        src/util.c.orig
+        tests/help-version.orig
+
+no changes added to commit (use "git add" and/or "git commit -a")
+I obtained the status to see what files have been modified.
+
+8. I familiarized myself with the necessary commands and tools that I will need for the next step.
+
+9. vc-revert
+emacs NEWS
+C-x v u
+emacs README
+C-x v u
+emacs TODO
+C-x v u
+emacs doc/diagmeet.note
+C-x v u
+emacs ms/config.bat
+C-x v u
+emacs ms/config.site
+C-x v u
+emacs po/en.po
+C-x v u
+emacs src/diff.h
+C-x v u
+emacs src/system.h
+C-x v u
+emacs tests/help-version
+C-x v u
+
+I opened each of these files in Emacs and used vc-revert (C-x v u) to revert them as per the spec.
+
+emacs src/analyze.c
+C-x v =
+emacs src/cmp.c
+C-x v =
+emacs src/context.c
+C-x v =
+emacs src/diff.c
+C-x v =
+emacs src/diff3.c
+C-x v =
+emacs src/dir.c
+C-x v =
+emacs src/ifdef.c
+C-x v =
+emacs src/io.c
+C-x v =
+emacs src/sdiff.c
+C-x v =
+emacs src/side.c
+C-x v =
+emacs src/util.c
+C-x v =
+
+I opened each of these files in Emacs and used vc-diff (C-x v =) to find out what the differences were. I then went through each hunk and used diff-apply-hunk (C-c C-a) to undo 
+the changes made to the grave accents in the comments.
+
+10. emacs diff.c.rej
+C-x d
+emacs diff3.c.rej
+C-x d
+
+I opened the rejected patch files and using the dired command, opened the respective files (diff.c and diff3.c) so I could view both simultaneously. I went through and changed 
+the grave accent to an apostrophe as specified by the patch file. 
+
+11. git clean -f
+This command removes all the untracked files, with the -f option forcing the removal of these files since they need to be deleted.
+
+12. git status
+On branch arpit3.0
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   src/cmp.c
+        modified:   src/diff.c
+        modified:   src/diff3.c
+        modified:   src/dir.c
+        modified:   src/sdiff.c
+        modified:   src/util.c
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+This command shows us the half-dozen modified files as expected. 
+
+git diff > quote-3.0-patch.txt
+
+This command put in the 327-line patch into quote-3.0-patch.txt.
+
+13. ./bootstrap
+This command runs bootstrap. 
+
+wget http://web.cs.ucla.edu/classes/spring17/cs35L/assign/diffutils-gets.diff
+This command gets the patch for the gets function. 
+
+patch -p0 < diffutils-gets.diff
+This command patched the file lib/stdio.in.h by commenting out the _GL_WARN_ON_USE.
+
+./configure
+This command configured the program.
+
+make
+This command runs the make option in the Makefile.
+
+make check
+This command checks for the appropriate files.
+
+src/diff . -
+src/diff: cannot compare '-' to a directory
+
+This command shows that the grave accent has been changed to an apostrophe.
+
+src/diff --help
+Usage: src/diff [OPTION]... FILES
+Compare files line by line.
+
+  -i  --ignore-case  Ignore case differences in file contents.
+  --ignore-file-name-case  Ignore case when comparing file names.
+  --no-ignore-file-name-case  Consider case when comparing file names.
+  -E  --ignore-tab-expansion  Ignore changes due to tab expansion.
+  -b  --ignore-space-change  Ignore changes in the amount of white space.
+  -w  --ignore-all-space  Ignore all white space.
+  -B  --ignore-blank-lines  Ignore changes whose lines are all blank.
+  -I RE  --ignore-matching-lines=RE  Ignore changes whose lines all match RE.
+  --strip-trailing-cr  Strip trailing carriage return on input.
+  -a  --text  Treat all files as text.
+
+  -c  -C NUM  --context[=NUM]  Output NUM (default 3) lines of copied context.
+  -u  -U NUM  --unified[=NUM]  Output NUM (default 3) lines of unified context.
+    --label LABEL  Use LABEL instead of file name.
+    -p  --show-c-function  Show which C function each change is in.
+    -F RE  --show-function-line=RE  Show the most recent line matching RE.
+  -q  --brief  Output only whether files differ.
+  -e  --ed  Output an ed script.
+  --normal  Output a normal diff.
+  -n  --rcs  Output an RCS format diff.
+  -y  --side-by-side  Output in two columns.
+    -W NUM  --width=NUM  Output at most NUM (default 130) print columns.
+    --left-column  Output only the left column of common lines.
+    --suppress-common-lines  Do not output common lines.
+  -D NAME  --ifdef=NAME  Output merged file to show '#ifdef NAME' diffs.
+  --GTYPE-group-format=GFMT  Similar, but format GTYPE input groups with GFMT.
+  --line-format=LFMT  Similar, but format all input lines with LFMT.
+  --LTYPE-line-format=LFMT  Similar, but format LTYPE input lines with LFMT.
+    LTYPE is 'old', 'new', or 'unchanged'.  GTYPE is LTYPE or 'changed'.
+    GFMT may contain:
+      %<  lines from FILE1
+      %>  lines from FILE2
+      %=  lines common to FILE1 and FILE2
+      %[-][WIDTH][.[PREC]]{doxX}LETTER  printf-style spec for LETTER
+        LETTERs are as follows for new group, lower case for old group:
+          F  first line number
+          L  last line number
+          N  number of lines = L-F+1
+          E  F-1
+          M  L+1
+    LFMT may contain:
+      %L  contents of line
+      %l  contents of line, excluding any trailing newline
+      %[-][WIDTH][.[PREC]]{doxX}n  printf-style spec for input line number
+    Either GFMT or LFMT may contain:
+      %%  %
+      %c'C'  the single character C
+      %c'\OOO'  the character with octal code OOO
+
+  -l  --paginate  Pass the output through 'pr' to paginate it.
+  -t  --expand-tabs  Expand tabs to spaces in output.
+  -T  --initial-tab  Make tabs line up by prepending a tab.
+  --tabsize=NUM  Tab stops are every NUM (default 8) print columns.
+  --suppress-blank-empty  Suppress space or tab before empty output lines.
+
+  -r  --recursive  Recursively compare any subdirectories found.
+  -N  --new-file  Treat absent files as empty.
+  --unidirectional-new-file  Treat absent first files as empty.
+  -s  --report-identical-files  Report when two files are the same.
+  -x PAT  --exclude=PAT  Exclude files that match PAT.
+  -X FILE  --exclude-from=FILE  Exclude files that match any pattern in FILE.
+  -S FILE  --starting-file=FILE  Start with FILE when comparing directories.
+  --from-file=FILE1  Compare FILE1 to all operands.  FILE1 can be a directory.
+  --to-file=FILE2  Compare all operands to FILE2.  FILE2 can be a directory.
+
+  --horizon-lines=NUM  Keep NUM lines of the common prefix and suffix.
+  -d  --minimal  Try hard to find a smaller set of changes.
+  --speed-large-files  Assume large files and many scattered small changes.
+
+  -v  --version  Output version info.
+  --help  Output this help.
+
+FILES are 'FILE1 FILE2' or 'DIR1 DIR2' or 'DIR FILE...' or 'FILE... DIR'.
+If --from-file or --to-file is given, there are no restrictions on FILES.
+If a FILE is '-', read standard input.
+Exit status is 0 if inputs are the same, 1 if different, 2 if trouble.
+
+Report bugs to: bug-diffutils@gnu.org
+GNU diffutils home page: <http://www.gnu.org/software/diffutils/>
+General help using GNU software: <http://www.gnu.org/gethelp/>
+
+This command shows that the grave accent has been changed in the appropriate places to an apostrophe.
+
+14. mkdir diffutils-3.0 diffutils-3.0-patch
+This command creates the appropriate directories for comparison.
+
+cp -r ./diffutils/src/*.c ./diffutils-3.0-patch/
+This command put all my modified source code into the appropriate directory.
+
+git clone https://git.savannah.gnu.org/git/diffutils.git diffutils-unmodified
+This command obtains the original source code.
+
+git checkout 'v3.0' -b 'unmodified'
+This command allows me to checkout the original v3.0 branch.
+
+cp -r ./diffutils-unmodified/src/*.c ./diffutils-3.0
+This command moves all the source code into the appropriate directory.
+
+./diffutils/src/diff -pru diffutils-3.0 diffutils-3.0-patch >quote-3.0-test.txt
+This command puts the differences into quote-3.0-test.txt as specified by the spec.
+
+15. diff -u quote-3.0-test.txt diffutils/quote-3.0-patch.txt > sanity.txt
+I ran this command to see the difference between the two files. The two are not identical, but the differences are innocuous. The differences are primarily due to 
+paths and the fact that diff and diff3 were switched in their positions in the two files. Thus, we conclude that the patch was a success!

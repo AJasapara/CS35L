@@ -1,0 +1,113 @@
+Name: Arpit Jasapara, UID: 504742401
+
+1. emacs hw9.txt
+I ran this command to create hw9.txt to explain what I did during this homework.
+
+2. git checkout -b 'quote' 'v3.0'
+I ran this command to check into a new branch called "quote".
+
+3. patch -p1 < quote-3.0-patch.txt 
+patching file src/cmp.c
+patching file src/diff.c
+patching file src/diff3.c
+patching file src/dir.c
+patching file src/sdiff.c
+patching file src/util.c
+
+The patch ran successfully.
+
+4. C-x 4 a
+I opened emacs and tested this command to see how it adds an entry for the current file in the ChangeLog.
+
+5. ChangeLog entries:
+emacs src/cmp.c
+C-x 4 a
+emacs src/diff.c
+C-x 4 a
+emacs src/diff3.c
+C-x 4 a
+emacs src/dir.c
+C-x 4 a
+emacs src/sdiff.c
+C-x 4 a
+emacs src/util.c
+C-x 4 a
+I added the appropriate ChangeLog entries for each file.
+
+6. git commit -aF src/ChangeLog
+I committed using the ChangeLog as my commit message.
+
+7. git format-patch -1 --stdout > formatted-patch.txt
+This command created formatted-patch.txt as specified in the spec.
+
+8. git checkout -b 'partner1' 'v3.0'
+This command let me check into a new branch 'partner'.
+
+git am sanketh-patch.txt
+Applying: 2017-06-03 Sanketh Sharath Hegde <sanketh@lnxsrv07.seas.ucla.edu>
+This command applied his patch and ran successfully.
+
+./bootstrap
+wget http://web.cs.ucla.edu/classes/spring17/cs35L/assign/diffutils-gets.diff
+patch -p0 < diffutils-gets.diff
+./configure
+make
+make check
+
+I ran these commands as in the lab so I can confirm that his patch changed the grave accents and apostrophes appropriately.
+
+src/diff . -
+src/diff: cannot compare '-' to a directory
+
+src/diff --help
+...
+FILES are 'FILE1 FILE2' or 'DIR1 DIR2' or 'DIR FILE...' or 'FILE... DIR'.
+...
+
+I ran these commands to check if the patch worked. Since there are no grave accents we can see that the patch did indeed work.
+
+9. make distdir
+cd diffutils-3.0.1-fd7a
+
+I ran these commands so that I can verify my partner's ChangeLog file.
+
+emacs ChangeLog
+2017-06-04  Sanketh Sharath Hegde  <sanketh@lnxsrv07.seas.ucla.edu>
+
+        2017-06-03 Sanketh Sharath Hegde <sanketh@lnxsrv07.seas.ucla.edu>
+                * src/cmp.c: Reverted apostrophe (') back to grave (`) for comments.
+                * src/diff.c: Reverted apostrophe (') back to grave (`) for comments.
+                * src/diff3.c: Reverted apostrophe (') back to grave (`) for comments.
+                * src/dir.c: Reverted apostrophe (') back to grave (`) for comments.
+                * src/diff.c: Reverted apostrophe (') back to grave (`) for comments.
+                * src/util.c: Reverted apostrophe (') back to grave (`) for comments.
+
+This is the first and most recent entry in the ChangeLog which is appropriate since my partner was the last to modify the patch. His ChangeLog entry is verified.
+
+I was unsure if the spec was asking me to verify my ChangeLog or my partner's ChangeLog so I repeated Steps 8 and 9 to verify my ChangeLog entry:
+2017-06-04  Arpit Deepak Jasapara  <arpit@lnxsrv07.seas.ucla.edu>
+
+        2017-06-03 Arpit Deepak Jasapara <arpit@lnxsrv07.seas.ucla.edu>
+                * util.c: Reverted apostrophe to grave accent in the comments.
+
+                * sdiff.c: Reverted apostrophe to grave accent in the comments.
+
+                * dir.c: Reverted apostrophe to grave accent in the comments.
+
+                * diff3.c: Reverted apostrophe to grave accent in the comments.
+
+                * diff.c: Reverted apostrophe to grave accent in the comments.
+
+                * cmp.c: Reverted apostrophe to grave accent in the comments.
+
+This is the first and most recent entry in the ChangeLog which is appropriate since I was the last to modify the patch. My ChangeLog entry is verified.
+
+10. I downloaded Xming, and installed it, so I could run an X server on my laptop. Then I changed PuTTY to allow X11 forwarding so gitk would open.
+
+cd ~eggert/src/gnu/emacs
+gitk
+
+I went into this directory and entered the command gitk as specified in the spec. I then found the newest merge that is not newer than 2015-01-25:
+Merge branch 'master' into xwidget
+
+I then took a screenshot and briefly described the roles of the subwindows in gitk-description.txt.

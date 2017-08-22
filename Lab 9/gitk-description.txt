@@ -1,0 +1,14 @@
+Name: Arpit Jasapara, UID: 504742401
+
+The top left window shows a hierarchical tree of commits. The commit messages and the relationships between branches are shown.
+
+The top middle window shows who made the commit in the respective row in the top left window and their email address.
+
+The top right window shows the date of the commit in the respective row in the top left window.
+
+The bottom left window shows the ChangeLog of the commit with some additional information. The buttons above this window allow you to configure the view and format.
+The diff will show you the difference in the normal diff/patch format. The old version will show the old version, and the new version will show the new version.
+
+The bottom right window shows the names of the files that were changed if the button 'Patch' above the window is selected. However, if 'Tree' is selected, then 
+the bottom right window shows the contents of the directory and its subdirectories at the time of the commit. Selecting this option, also changes the bottom LEFT window, 
+where instead of displaying the changes made to the files in any format (diff/old/new), it will only display the ChangeLog entry.
